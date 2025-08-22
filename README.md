@@ -3,7 +3,7 @@
 
 Android application project for browsing and discovering movies using **Kotlin** and **Jetpack Compose**.  
 
-![Project Banner](<img width="478" height="316" alt="Screenshot 2025-08-22 144918" src="https://github.com/user-attachments/assets/2d64f212-3978-469f-84f4-09e40fb38446" />
+(<img width="478" height="316" alt="Screenshot 2025-08-22 144918" src="https://github.com/user-attachments/assets/2d64f212-3978-469f-84f4-09e40fb38446" />
 )  
 
 ---
