@@ -1,5 +1,5 @@
 # Group-3-depi
-# 🎬 Movie Discovery App  
+#  Movie Discovery App  
 
 Android application project for browsing and discovering movies using **Kotlin** and **Jetpack Compose**.  
 
@@ -8,7 +8,7 @@ Android application project for browsing and discovering movies using **Kotlin**
 
 ---
 
-## 👥 Team Members  
+##  Team Members  
 - **Hager Amr**  
 - **Habiba Magdy**  
 - **Jana Ayman**  
@@ -17,7 +17,7 @@ Android application project for browsing and discovering movies using **Kotlin**
 
 ---
 
-## 📌 Project Overview  
+##  Project Overview  
 The **Movie Discovery App** is a native Android application built with **Kotlin** and **Jetpack Compose** in **Android Studio / IntelliJ IDEA**. The objective is to provide users with a modern and user-friendly way to browse, search, and discover movies. The application integrates with a public API (such as **TMDB**) to fetch real-time movie data, display popular titles, and show detailed movie information.  
 
 ---
@@ -33,7 +33,7 @@ The **Movie Discovery App** is a native Android application built with **Kotlin*
 
 ---
 
-## 📂 Project Plan  
+##  Project Plan  
 
 ### **Week 1: Project Setup and UI Design**  
 - Initialize Android Studio project with Kotlin + Jetpack Compose  
@@ -61,7 +61,7 @@ The **Movie Discovery App** is a native Android application built with **Kotlin*
 
 ---
 
-## 🛠️ Technologies Used  
+##  Technologies Used  
 - **Kotlin**  
 - **Jetpack Compose**  
 - **Retrofit (Networking)**  
