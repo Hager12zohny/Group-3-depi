@@ -22,7 +22,7 @@ The **Movie Discovery App** is a native Android application built with **Kotlin*
 
 ---
 
-## 🎯 Project Objectives  
+##  Project Objectives  
 - Develop a native Android app with a **modern UI** using Jetpack Compose.  
 - Integrate with a **public movie API** to fetch and display real-time data.  
 - Implement **navigation** for browsing movies and accessing detailed information.  
