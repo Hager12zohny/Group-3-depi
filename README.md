@@ -1,75 +1,75 @@
 # Group-3-depi
-Android Movie Mobile Application
+# 🎬 Movie Discovery App  
 
-This project is a Movie Discovery Android Application built with Kotlin and the modern Jetpack Compose UI toolkit. The application is being developed in IntelliJ IDEA / Android Studio by a team of five members: Hager Amr, Habiba Magdy, Jana Ayman, Hager Alaa, and Marocika Azmy.
-Contributors  
+Android application project for browsing and discovering movies using **Kotlin** and **Jetpack Compose**.  
 
-- [Hager Amr](https://github.com/Hager12zohny)  
-- [Habiba Magdy](https://github.com/habibamagdy142)  
-- [Jana Ayman](https://github.com/janaayman76)  
-- [Hager Alaa](https://github.com/hagarralaa)  
-- [Marocika Azmy](https://github.com/marocika) 
+![Project Banner](<img width="478" height="316" alt="Screenshot 2025-08-22 144918" src="https://github.com/user-attachments/assets/2d64f212-3978-469f-84f4-09e40fb38446" />
+)  
 
-The main objective of this project is to create a native Android app that allows users to browse, search, and discover movies using data fetched from a public API (such as TMDB). The app will feature a modern, declarative UI, following Android MDC design principles, and adopt a clean architecture approach. It will also integrate unit testing to ensure reliability, and focus on UI/UX best practices with smooth animations, error handling, and secure storage of API keys.
+---
 
- Technologies & Tools
+## 👥 Team Members  
+- **Hager Amr**  
+- **Habiba Magdy**  
+- **Jana Ayman**  
+- **Hager Alaa**  
+- **Marocika Azmy**  
 
-Programming Language: Kotlin
+---
 
-UI Development: Jetpack Compose
+## 📌 Project Overview  
+The **Movie Discovery App** is a native Android application built with **Kotlin** and **Jetpack Compose** in **Android Studio / IntelliJ IDEA**. The objective is to provide users with a modern and user-friendly way to browse, search, and discover movies. The application integrates with a public API (such as **TMDB**) to fetch real-time movie data, display popular titles, and show detailed movie information.  
 
-Architecture: Clean Architecture + Jetpack Navigation
+---
 
-Networking: Retrofit (for API integration)
+## 🎯 Project Objectives  
+- Develop a native Android app with a **modern UI** using Jetpack Compose.  
+- Integrate with a **public movie API** to fetch and display real-time data.  
+- Implement **navigation** for browsing movies and accessing detailed information.  
+- Add **search functionality** for discovering movies by title.  
+- Ensure **clean architecture** and follow Android **Material Design Components (MDC)**.  
+- Apply **unit testing** to verify app logic.  
+- Secure sensitive data like API keys using `gradle.properties`.  
 
-Design Principles: Android MDC (Material Design Components)
+---
 
-Version Control: Git & GitHub
+## 📂 Project Plan  
 
-Testing: Unit Testing
+### **Week 1: Project Setup and UI Design**  
+- Initialize Android Studio project with Kotlin + Jetpack Compose  
+- Set up GitHub repository  
+- Design wireframes for the app screens  
+- Build a static home screen UI  
 
-Security: API key management via gradle.properties
+### **Week 2: API Integration and Dynamic Display**  
+- Configure Retrofit for networking  
+- Fetch and parse movie data into Kotlin data classes  
+- Display movies dynamically in a grid layout  
 
-IDE: Android Studio / IntelliJ IDEA
+### **Week 3: Navigation and Detail Screen**  
+- Implement navigation with Jetpack Navigation  
+- Create a detailed movie screen (title, synopsis, rating, release date)  
+- Pass movie data between screens  
+- Write unit tests for data logic  
 
- Project Plan:
+### **Week 4: Search, Security, and Final Polish**  
+- Add search functionality  
+- Secure API key storage with `gradle.properties`  
+- Add animations, loading indicators, and error handling  
+- Write project documentation (README.md)  
+- Deliver a polished final app  
 
-Week 1: Project Setup and UI Design
+---
 
-Initialize Android Studio project with Kotlin + Jetpack Compose.
+## 🛠️ Technologies Used  
+- **Kotlin**  
+- **Jetpack Compose**  
+- **Retrofit (Networking)**  
+- **Jetpack Navigation**  
+- **Git & GitHub**  
+- **Unit Testing**  
+- **Android MDC (Material Design Components)**  
+- **IntelliJ IDEA / Android Studio**  
 
-Set up GitHub repository for version control.
+---
 
-Design wireframes for main screens (movie grid & detail view).
-
-Build a static home screen UI with Jetpack Compose.
-
-Week 2: API Integration and Dynamic Display
-
-Configure Retrofit for API communication.
-
-Fetch and parse movie data into Kotlin data classes.
-
-Display movies dynamically in a lazy grid layout.
-
-Week 3: Navigation and Detail Screen
-
-Implement navigation with Jetpack Navigation.
-
-Create a detailed movie screen (title, synopsis, rating, release date).
-
-Pass movie data between screens.
-
-Write unit tests for data handling and business logic.
-
-Week 4: Search, Security, and Final Polish
-
-Implement search functionality to look up movies by title.
-
-Secure API key storage.
-
-Add animations, loading indicators, and error handling.
-
-Write project documentation (README.md).
-
-Deliver a polished, production-ready app.
