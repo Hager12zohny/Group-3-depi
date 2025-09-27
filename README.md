@@ -9,11 +9,11 @@ Android application project for browsing and discovering movies using **Kotlin**
 ---
 
 ##  Team Members  
-- **Hager Amr**  
-- **Habiba Magdy**  
-- **Jana Ayman**  
-- **Hager Alaa**  
-- **Marocika Azmy**  
+- **Hager Amr role:Home screen UI(user interface), API & Networking**  
+- **Habiba Magdy role:Search bar feature, API & Networking**  
+- **Jana Ayman role:UI/UX & Wireframes:Create wireframes for all screens (Home, Detail, Search, etc.)**  
+- **Hager Alaa role:UI/UX & Wireframes: Create wireframes for all screens (Home, Detail, Search, etc.)**  
+- **Marocika Azmy role:Navigation between screens Using Jetpack navigation-handle data passing from Home screen to Detail Screen collaborate on search logic**  
 
 ---
 
