@@ -131,8 +131,100 @@ fun MovieHomeScreen() {
             thickness = 1.dp,
             color = Color(0xFF9C27B0)
         )
+        MovieSection(
+            title = "New Release",
+            movies = listOf(
+                Movie("The Notebook", R.drawable.thenotebook),
+                Movie("devil wears prada", R.drawable.devilwearsprada),
+                Movie("Divergent", R.drawable.divergent)
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 7.dp),
+            thickness = 1.dp,
+            color = Color(0xFF9C27B0)
+        )
+
+        // trending section
+        MovieSection(
+            title = "Trending",
+            movies = listOf(
+                Movie("Moana", R.drawable.moana),
+                Movie("How to lose a guy in 10 days", R.drawable.howtoloseaguy),
+                Movie("inside out", R.drawable.insideout),
+                Movie("Peaky Blinders", R.drawable.ic_launcher_foreground)
+            )
+        )
     }
 }
+data class Movie(val title: String, val posterRes: Int)
+
+@Composable
+fun MovieSection(title: String, movies: List<Movie>) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = title, fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+            Text(
+                text = "See all",
+                fontSize = 14.sp,
+                color = Color(0xFF9C27B0),
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+
+        Box(modifier = Modifier.fillMaxWidth()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp)
+            ) {
+                items(movies) { movie ->
+                    MovieCard(movie)
+                }
+            }
+
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = "Scroll",
+                tint = Color.Black.copy(alpha = 0.7f),
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 6.dp)
+                    .size(35.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun MovieCard(movie: Movie) {
+    Card(
+        modifier = Modifier
+            .width(120.dp)
+            .height(180.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+    ) {
+        Image(
+            painter = painterResource(id = movie.posterRes),
+            contentDescription = movie.title,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
