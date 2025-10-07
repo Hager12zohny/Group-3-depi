@@ -58,6 +58,7 @@ The **Movie Discovery App** is a native Android application built with **Kotlin*
 - Add animations, loading indicators, and error handling  
 - Write project documentation (README.md)  
 - Deliver a polished final app  
+- 
 
 ---
 
