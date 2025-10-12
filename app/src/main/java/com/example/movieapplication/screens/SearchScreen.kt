@@ -1,7 +1,4 @@
 package com.example.movieapplication.screens
-
-package com.example.movieapplication.screens
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip  // For Modifier.clip
+import androidx.compose.ui.draw.clip  
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -46,11 +43,11 @@ fun MovieScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF4A235A))  //  solid dark purple
+            .background(Color(0xFF4A235A))  //dark purple
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // Search Bar (mimics SearchView: white rounded background, white hint, search icon)
+        // Search Bar 
         OutlinedTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
@@ -66,14 +63,6 @@ fun MovieScreen() {
                     modifier = Modifier.size(24.dp)
                 )
             },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.White,
-                unfocusedBorderColor = Color.White,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
-                cursorColor = Color.White,
-                containerColor = Color.White  // White background like search_background
-            ),
             singleLine = true
         )
 
@@ -91,11 +80,11 @@ fun MovieScreen() {
          Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(1f)  // Fills remaining space
+                .fillMaxHeight(1f)  
                 .padding(4.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)  // Small gap between sections
+            horizontalArrangement = Arrangement.spacedBy(4.dp)  //  gap 
         ) {
-            // Left Section (Main: ~2/3 width,
+            // Left Section 
             MovieSection(
                 movies = listOf(
                     Movie("Harry Potter", R.drawable.harry_potter.takeIf { true } ?: fallbackRes, 100.dp),
@@ -103,10 +92,9 @@ fun MovieScreen() {
                     Movie("The Matrix", R.drawable.the_matrix.takeIf { true } ?: fallbackRes, 120.dp),
                     Movie("Titanic", R.drawable.titanic_poster.takeIf { true } ?: fallbackRes, 100.dp)
                 ),
-                modifier = Modifier.weight(2f)  // ~2/3 width
-            )
+                modifier = Modifier.weight(1.5f)              )
 
-            // Right Section (Secondary: ~1/3 width,
+            // Right Section 
             MovieSection(
                 movies = listOf(
                     Movie("The Maze Runner", R.drawable.the_maze_runner.takeIf { true } ?: fallbackRes, 120.dp),
@@ -114,13 +102,13 @@ fun MovieScreen() {
                     Movie("Inception", R.drawable.inception_poster.takeIf { true } ?: fallbackRes, 100.dp),
                     Movie("Avatar", R.drawable.avatar.takeIf { true } ?: fallbackRes, 105.dp)
                 ),
-                modifier = Modifier.weight(1f)  // ~1/3 width
+                modifier = Modifier.weight(1.5f)  
             )
         }
     }
 }
 
-// Data class for Movie
+// Data of the Movie
 data class Movie(val title: String, val posterRes: Int, val imageHeight: Dp)
 
 
@@ -129,12 +117,12 @@ fun MovieSection(
     movies: List<Movie>,
     modifier: Modifier = Modifier
 ) {
-    Card(  // Mimics outer CardView: rounded 8dp, elevation 4dp, margin 4dp
+    Card(  
         modifier = modifier
-            .fillMaxHeight()  // Fills section height
+            .fillMaxHeight()  
             .padding(4.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),  // #FFFFFF background
+        colors = CardDefaults.cardColors(containerColor = Color.White),  
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -147,13 +135,13 @@ fun MovieSection(
                 Image(
                     painter = painterResource(id = movie.posterRes),
                     contentDescription = movie.title,
-                    contentScale = ContentScale.Crop,  // Matches centerCrop
+                    contentScale = ContentScale.Crop,  
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(movie.imageHeight)  // Exact heights: 100dp, 105dp, etc.
+                        .height(movie.imageHeight)  
                 )
 
-                // Title (exact: black, 16sp, bold, center, marginTop 8dp)
+                // Title 
                 Text(
                     text = movie.title.trim(),
                     color = Color.Black,
