@@ -59,6 +59,10 @@ object MovieRepository {
         val url = "$BASE_URL/trending/movie/$timeWindow?api_key=$API_KEY&language=$LANG"
         return fetchMovieList(url)
     }
+    fun getNowPlayingMovies(): List<Movie> {
+        val url = "$BASE_URL/movie/now_playing?api_key=$API_KEY&language=$LANG&page=1"
+        return fetchMovieList(url)
+    }
 }
 
 
