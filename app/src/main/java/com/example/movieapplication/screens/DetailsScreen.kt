@@ -42,7 +42,7 @@ fun MovieDetailTop() {
             elevation = CardDefaults.cardElevation(6.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.movie_poster),
+                painter = painterResource(id = R.drawable.movie_posterr),
                 contentDescription = "Movie Poster",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -152,9 +152,9 @@ fun MovieDetailBottom() {
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            CastItem(name = "Timothée Chalamet", imageRes = R.drawable.timothee)
-            CastItem(name = "Rebecca Ferguson", imageRes = R.drawable.rebecca)
-            CastItem(name = "Zendaya", imageRes = R.drawable.zendaya)
+            CastItem(name = "Timothée Chalamet", imageRes = R.drawable.timotheee)
+            CastItem(name = "Rebecca Ferguson", imageRes = R.drawable.rebeccaa)
+            CastItem(name = "Zendaya", imageRes = R.drawable.zendayaa)
         }
 
         Spacer(modifier = Modifier.height(24.dp))

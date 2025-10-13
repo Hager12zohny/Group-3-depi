@@ -26,14 +26,6 @@ import com.example.movieapplication.R
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.unit.Dp
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MovieScreen()
-        }
-    }
-}
 
 @Composable
 fun MovieScreen() {
@@ -87,20 +79,20 @@ fun MovieScreen() {
             // Left Section 
             MovieSection(
                 movies = listOf(
-                    Movie("Harry Potter", R.drawable.harry_potter.takeIf { true } ?: fallbackRes, 100.dp),
-                    Movie("Interstellar", R.drawable.interstellar.takeIf { true } ?: fallbackRes, 105.dp),
-                    Movie("The Matrix", R.drawable.the_matrix.takeIf { true } ?: fallbackRes, 120.dp),
-                    Movie("Titanic", R.drawable.titanic_poster.takeIf { true } ?: fallbackRes, 100.dp)
+                    SearchMovie("Harry Potter", R.drawable.harry_potter.takeIf { true } ?: fallbackRes, 100.dp),
+                    SearchMovie("Interstellar", R.drawable.interstellar.takeIf { true } ?: fallbackRes, 105.dp),
+                    SearchMovie("The Matrix", R.drawable.the_matrix.takeIf { true } ?: fallbackRes, 120.dp),
+                    SearchMovie("Titanic", R.drawable.titanic_poster.takeIf { true } ?: fallbackRes, 100.dp)
                 ),
                 modifier = Modifier.weight(1.5f)              )
 
             // Right Section 
             MovieSection(
                 movies = listOf(
-                    Movie("The Maze Runner", R.drawable.the_maze_runner.takeIf { true } ?: fallbackRes, 120.dp),
-                    Movie("xXx", R.drawable.xxx_poster.takeIf { true } ?: fallbackRes, 100.dp),
-                    Movie("Inception", R.drawable.inception_poster.takeIf { true } ?: fallbackRes, 100.dp),
-                    Movie("Avatar", R.drawable.avatar.takeIf { true } ?: fallbackRes, 105.dp)
+                    SearchMovie("The Maze Runner", R.drawable.the_maze_runner.takeIf { true } ?: fallbackRes, 120.dp),
+                    SearchMovie("xXx", R.drawable.xxx_poster.takeIf { true } ?: fallbackRes, 100.dp),
+                    SearchMovie("Inception", R.drawable.inception_poster.takeIf { true } ?: fallbackRes, 100.dp),
+                    SearchMovie("Avatar", R.drawable.avatar.takeIf { true } ?: fallbackRes, 105.dp)
                 ),
                 modifier = Modifier.weight(1.5f)  
             )
@@ -109,12 +101,12 @@ fun MovieScreen() {
 }
 
 // Data of the Movie
-data class Movie(val title: String, val posterRes: Int, val imageHeight: Dp)
+data class SearchMovie(val title: String, val posterRes: Int, val imageHeight: Dp)
 
 
 @Composable
 fun MovieSection(
-    movies: List<Movie>,
+    movies: List<SearchMovie>,
     modifier: Modifier = Modifier
 ) {
     Card(  
