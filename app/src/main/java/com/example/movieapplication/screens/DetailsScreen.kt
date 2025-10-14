@@ -1,7 +1,7 @@
 package com.example.movieapplication.screens
 
 import android.util.Log
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -14,39 +14,38 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.movieapplication.R
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
+
 import com.example.movieapplication.viewmodel.DetailsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.movieapplication.model.CastMember
+import com.example.movieapplication.model.Review
 
 @Composable
 fun DetailsScreen(movieId: Int, viewModel: DetailsViewModel = viewModel()) {
-    val movieDetailsState = viewModel.movieDetails.collectAsState()
+    val movieDetails by viewModel.movieDetails.collectAsState()
+    val castList by viewModel.castList.collectAsState()
+    val reviewList by viewModel.reviewList.collectAsState()
 
-    // ✅ مؤقتًا بنجهز ليست فاضية لحد ما الفريق يضيف الـ functions
-    val castList = remember { mutableStateListOf<CastMember>() }
-    val reviewList = remember { mutableStateListOf<Review>() }
 
-    // تحميل بيانات الفيلم عند فتح الشاشة
     LaunchedEffect(movieId) {
         Log.d("DETAILS_UI", "Requesting details for movieId=$movieId")
         viewModel.getMovieDetails(movieId)
-        // هنا بعدين هتستدعي:
-        // castList.addAll(MovieRepository.getMovieCast(movieId))
-        // reviewList.addAll(MovieRepository.getMovieReviews(movieId))
     }
-
-    val movieDetails = movieDetailsState.value
 
     when {
         movieDetails == null -> {
-            // حالة التحميل
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -56,7 +55,7 @@ fun DetailsScreen(movieId: Int, viewModel: DetailsViewModel = viewModel()) {
         }
 
         else -> {
-            Log.d("DETAILS_UI", "Showing: ${movieDetails.title}")
+            Log.d("DETAILS_UI", "Showing: ${movieDetails?.title}")
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -64,12 +63,15 @@ fun DetailsScreen(movieId: Int, viewModel: DetailsViewModel = viewModel()) {
                     .verticalScroll(rememberScrollState())
             ) {
                 MovieDetailTopDynamic(
-                    title = movieDetails.title,
-                    overview = movieDetails.overview,
-                    posterPath = movieDetails.poster_path
+                    title = movieDetails?.title,
+                    overview = movieDetails?.overview,
+                    posterPath = movieDetails?.poster_path
                 )
-                // ✅ نمرر القوائم هنا
-                MovieDetailBottom(cast = castList, reviews = reviewList)
+
+                MovieDetailBottom(
+                    cast = castList,
+                    reviews = reviewList
+                )
             }
         }
     }
@@ -135,48 +137,60 @@ fun MovieDetailBottom(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF1C1C27))
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
+        //Cast Section
         Text(
             text = "Cast",
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = Color.White,
                 fontWeight = FontWeight.Bold
-            )
+            ),
+            modifier = Modifier.padding(top = 8.dp)
         )
-        Spacer(modifier = Modifier.height(12.dp))
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         if (cast.isEmpty()) {
             Text("Loading cast...", color = Color.Gray, fontSize = 12.sp)
         } else {
-            Row(
+            LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                cast.take(3).forEach { member ->
-                    CastItem(name = member.name, imageRes = R.drawable.timotheee)
+                items(cast.take(6)) { member ->
+                    CastItem(
+                        name = member.name ?: "Unknown",
+                        imageUrl = member.profile_path
+                    )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        //  Reviews Section
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = "Reviews",
             style = MaterialTheme.typography.bodyLarge.copy(
                 color = Color.White,
                 fontWeight = FontWeight.Bold
-            )
+            ),
+            modifier = Modifier.padding(top = 4.dp)
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         if (reviews.isEmpty()) {
             Text("Loading reviews...", color = Color.Gray, fontSize = 12.sp)
         } else {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                reviews.take(2).forEach { review ->
-                    ReviewItem(reviewer = review.author, content = review.content)
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.padding(top = 6.dp)
+            ) {
+                reviews.take(3).forEach { review ->
+                    ReviewItem(
+                        reviewer = review.author ?: "Anonymous",
+                        content = review.content ?: "No review available."
+                    )
                 }
             }
         }
@@ -184,29 +198,30 @@ fun MovieDetailBottom(
 }
 
 @Composable
-fun CastItem(name: String, imageRes: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Card(
-            shape = CircleShape,
-            modifier = Modifier.size(60.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-        Spacer(modifier = Modifier.height(6.dp))
+fun CastItem(name: String, imageUrl: String?) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(80.dp)
+    ) {
+        AsyncImage(
+            model = "https://image.tmdb.org/t/p/w500$imageUrl",
+            contentDescription = name,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = name,
             color = Color.White,
             fontSize = 12.sp,
-            textAlign = TextAlign.Center
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
+
 
 @Composable
 fun ReviewItem(reviewer: String, content: String) {

@@ -11,12 +11,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 🔍 ده بس علشان نتاكد ان MainActivity بدأت
-        Log.d("DETAILS_VM", "✅ MainActivity started")
+
+        Log.d("DETAILS_VM", "MainActivity started")
 
         setContent {
             MovieApplicationTheme {
-                // 🧩 مؤقتًا بنعرض شاشة التفاصيل بدل الهوم
+
                 DetailsScreen(movieId = 550)
             }
         }
