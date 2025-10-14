@@ -1,8 +1,11 @@
 package com.example.movieapplication.repository
 
+import com.example.movieapplication.model.AuthorDetails
+import com.example.movieapplication.model.CastMember
 import com.example.movieapplication.model.Genre
 import com.example.movieapplication.model.Movie
 import com.example.movieapplication.model.MovieDetails
+import com.example.movieapplication.model.Review
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -103,7 +106,63 @@ object MovieRepository {
             genres = genres
         )
     }
+
+
+fun getMovieCast(movieId: Int): List<CastMember> {
+    val url = "$BASE_URL/movie/$movieId/credits?api_key=$API_KEY&language=$LANG"
+    val jsonResponse = makeHttpRequest(url) ?: return emptyList()
+    val jsonObject = JSONObject(jsonResponse)
+    val castArray = jsonObject.optJSONArray("cast") ?: return emptyList()
+
+    val castList = mutableListOf<CastMember>()
+    for (i in 0 until castArray.length()) {
+        val item = castArray.getJSONObject(i)
+        castList.add(
+            CastMember(
+                id = item.getInt("id"),
+                name = item.optString("name", ""),
+                character = item.optString("character", ""),
+                profile_path = item.optString("profile_path", "")
+            )
+        )
+    }
+    return castList
 }
+
+// --- New: Fetch Reviews ---
+fun getMovieReviews(movieId: Int): List<Review> {
+    val url = "$BASE_URL/movie/$movieId/reviews?api_key=$API_KEY&language=$LANG&page=1"
+    val jsonResponse = makeHttpRequest(url) ?: return emptyList()
+    val jsonObject = JSONObject(jsonResponse)
+    val resultsArray = jsonObject.optJSONArray("results") ?: return emptyList()
+
+    val reviews = mutableListOf<Review>()
+    for (i in 0 until resultsArray.length()) {
+        val item = resultsArray.getJSONObject(i)
+        val authorDetailsJson = item.optJSONObject("author_details")
+
+        val authorDetails = authorDetailsJson?.let {
+            AuthorDetails(
+                name = it.optString("name", ""),
+                username = it.optString("username", ""),
+                avatar_path = it.optString("avatar_path", ""),
+                rating = it.optDouble("rating", 0.0)
+            )
+        }
+
+        reviews.add(
+            Review(
+                id = item.getString("id"),
+                author = item.optString("author", ""),
+                content = item.optString("content", ""),
+                author_details = authorDetails
+            )
+        )
+    }
+    return reviews
+} }
+
+
 
 
 
