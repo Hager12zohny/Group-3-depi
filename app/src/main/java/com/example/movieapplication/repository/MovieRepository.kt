@@ -14,13 +14,14 @@ import java.net.URL
 
 object MovieRepository {
 
-   // api key
+    // api key
     private const val API_KEY = "0e190f11fcdfb1b31cc1f977bb9420f5"
     private const val BASE_URL = "https://api.themoviedb.org/3"
     private const val LANG = "en-US"
 
     // function to get http request
     private fun makeHttpRequest(urlString: String): String? {
+
         var conn: HttpURLConnection? = null
         return try {
             conn = (URL(urlString).openConnection() as HttpURLConnection).apply {
@@ -95,6 +96,7 @@ object MovieRepository {
             }
         }
 
+
         return MovieDetails(
             id = item.getInt("id"),
             title = item.optString("title", ""),
@@ -106,6 +108,7 @@ object MovieRepository {
             genres = genres
         )
     }
+
 
 
 fun getMovieCast(movieId: Int): List<CastMember> {
