@@ -1,23 +1,23 @@
 package com.example.movieapplication
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.movieapplication.screens.DetailsScreen
+import androidx.activity.viewModels
 import com.example.movieapplication.ui.theme.MovieApplicationTheme
+import com.example.movieapplication.viewmodel.HomeViewModel
+import com.example.movieapplication.navigation.MovieAppNavGraph
 
 class MainActivity : ComponentActivity() {
+
+
+    private val homeViewModel by viewModels<HomeViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-        Log.d("DETAILS_VM", "MainActivity started")
-
         setContent {
             MovieApplicationTheme {
-
-                DetailsScreen(movieId = 550)
+                MovieAppNavGraph(homeViewModel = homeViewModel)
             }
         }
     }
