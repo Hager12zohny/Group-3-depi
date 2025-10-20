@@ -27,7 +27,10 @@ import com.example.movieapplication.viewmodel.HomeViewModel
 @Composable
 fun MovieHomeScreen(
     homeViewModel: HomeViewModel,
-    onMovieClick: (Int) -> Unit
+    onMovieClick: (Int) -> Unit,
+    clickOnSearch: () -> Unit
+
+
 ) {
     val newReleases by homeViewModel.newReleases.collectAsState()
     val trending by homeViewModel.trendingMovies.collectAsState()
@@ -51,12 +54,18 @@ fun MovieHomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
+
+
             placeholder = { Text("Search movies...", color = Color(0xFF9C27B0)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Filled.Search,
                     contentDescription = "Search",
-                    tint = Color(0xFF9C27B0)
+                    tint = Color(0xFF9C27B0),
+                    modifier = Modifier.clickable { clickOnSearch() }
+
+
+
                 )
             },
             singleLine = true,

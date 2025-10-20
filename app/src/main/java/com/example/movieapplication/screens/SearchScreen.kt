@@ -36,11 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapplication.R
 
 
 @Composable
-fun MovieScreen() {
+fun MovieScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val fallbackRes = R.drawable.ic_launcher_background
 
@@ -164,5 +166,6 @@ fun MovieSection(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun MovieScreenPreview() {
-    MovieScreen()
+    val navController = rememberNavController()
+   MovieScreen(navController)
 }
