@@ -29,7 +29,7 @@ fun MovieAppNavGraph(homeViewModel: HomeViewModel) {
 
             )
         }
-
+        //detail and home screen navigation
         composable(
             route = "details/{movieId}",
             arguments = listOf(navArgument("movieId") { type = NavType.IntType })
