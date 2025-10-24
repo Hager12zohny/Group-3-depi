@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.movieapplication.screens.DetailsScreen
 import com.example.movieapplication.screens.MovieHomeScreen
-import com.example.movieapplication.screens.MovieScreen
+import com.example.movieapplication.screens.SearchScreen
 import com.example.movieapplication.viewmodel.HomeViewModel
 
 @Composable
@@ -24,12 +24,11 @@ fun MovieAppNavGraph(homeViewModel: HomeViewModel) {
                     navController.navigate("details/$movieId")
                 },
                 clickOnSearch = {
-                    navController.navigate("searchScreen")
+                    navController.navigate("search")
                 }
-
             )
         }
-        //detail and home screen navigation
+
         composable(
             route = "details/{movieId}",
             arguments = listOf(navArgument("movieId") { type = NavType.IntType })
@@ -37,11 +36,10 @@ fun MovieAppNavGraph(homeViewModel: HomeViewModel) {
             val movieId = backStackEntry.arguments?.getInt("movieId") ?: 0
             DetailsScreen(movieId = movieId)
         }
-        //navigation bet Search screen and home screen
-        composable("searchScreen") {
-            MovieScreen(navController = navController)
-        }
 
+
+        composable("search") {
+            SearchScreen(navController = navController)
+        }
     }
 }
-
