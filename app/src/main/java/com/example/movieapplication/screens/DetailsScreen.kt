@@ -31,7 +31,10 @@ import com.example.movieapplication.viewmodel.DetailsViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movieapplication.model.CastMember
 import com.example.movieapplication.model.Review
-
+import kotlinx.coroutines.*
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 @Composable
 fun DetailsScreen(movieId: Int, viewModel: DetailsViewModel = viewModel()) {
     val movieDetails by viewModel.movieDetails.collectAsState()
@@ -250,4 +253,54 @@ fun ReviewItem(reviewer: String, content: String) {
 @Composable
 fun PreviewDetailsScreen() {
     DetailsScreen(movieId = 550)
+}
+@Composable
+fun DetailsScreen() {
+    var movieData by remember { mutableStateOf<JSONObject?>(null) }
+
+    LaunchedEffect(Unit) {
+        getMovieDetailsHttp { result ->
+            movieData = result
+        }
+    }
+
+    Column {
+        Text(
+            text = movieData?.toString() ?: "Loading...",
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+}
+
+fun getMovieDetailsHttp(onResult: (JSONObject?) -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch {
+        val apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY"
+        try {
+            val url = URL(apiUrl)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connect()
+
+            val responseCode = connection.responseCode
+            if (responseCode == 200) {
+                val response = connection.inputStream.bufferedReader().use { it.readText() }
+                val json = JSONObject(response)
+
+                withContext(Dispatchers.Main) {
+                    onResult(json)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    onResult(null)
+                }
+            }
+
+            connection.disconnect()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            withContext(Dispatchers.Main) {
+                onResult(null)
+            }
+        }
+    }
 }

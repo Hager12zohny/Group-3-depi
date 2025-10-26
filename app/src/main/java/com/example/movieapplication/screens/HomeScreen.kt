@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.movieapplication.R
 import com.example.movieapplication.model.Movie
@@ -26,13 +26,16 @@ import com.example.movieapplication.viewmodel.HomeViewModel
 
 @Composable
 fun MovieHomeScreen(
-    homeViewModel: HomeViewModel,
+    homeViewModel: HomeViewModel = viewModel(),
     onMovieClick: (Int) -> Unit
 ) {
     val newReleases by homeViewModel.newReleases.collectAsState()
     val trending by homeViewModel.trendingMovies.collectAsState()
 
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+
+    val filteredNewReleases = newReleases.filter { it.title.contains(searchQuery.text, ignoreCase = true) }
+    val filteredTrending = trending.filter { it.title.contains(searchQuery.text, ignoreCase = true) }
 
     Column(
         modifier = Modifier
@@ -70,12 +73,12 @@ fun MovieHomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Poster for Mission Impossible
+        // Poster for Featured Movie
         MoviePoster(posterRes = R.drawable.missionimpossible)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // New Releases
+        // New Releases Section
         Text(
             text = "New Releases",
             fontSize = 18.sp,
@@ -83,14 +86,11 @@ fun MovieHomeScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
-        MovieSection(
-            movies = newReleases.filter { it.title.contains(searchQuery.text, ignoreCase = true) },
-            onMovieClick = onMovieClick
-        )
+        MovieSection(movies = filteredNewReleases, onMovieClick = onMovieClick)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Trending
+        // Trending Section
         Text(
             text = "Trending",
             fontSize = 18.sp,
@@ -98,10 +98,7 @@ fun MovieHomeScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
-        MovieSection(
-            movies = trending.filter { it.title.contains(searchQuery.text, ignoreCase = true) },
-            onMovieClick = onMovieClick
-        )
+        MovieSection(movies = filteredTrending, onMovieClick = onMovieClick)
     }
 }
 
@@ -132,7 +129,7 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+            model = movie.poster_path,
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
