@@ -1,5 +1,5 @@
 package com.example.movieapplication.model
-
+//detail screen data class
 data class MovieDetails(
     val id: Int,
     val title: String?,
