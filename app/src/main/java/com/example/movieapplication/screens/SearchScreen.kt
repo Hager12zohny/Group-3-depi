@@ -1,6 +1,7 @@
 package com.example.movieapplication.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -15,15 +16,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.movieapplication.viewmodel.SearchViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = viewModel()) {
-
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     val searchResults = viewModel.searchResults.collectAsState().value
 
@@ -44,12 +44,8 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.medium),
-            placeholder = {
-                Text("Search movies...", color = Color.White.copy(alpha = 0.7f))
-            },
-            leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = null, tint = Color.White)
-            },
+            placeholder = { Text("Search movies...", color = Color.White.copy(alpha = 0.7f)) },
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.White) },
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Color(0xFF6C3483),
