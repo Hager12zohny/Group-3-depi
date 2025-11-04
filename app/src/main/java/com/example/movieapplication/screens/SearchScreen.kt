@@ -34,7 +34,7 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             .padding(16.dp)
     ) {
 
-        // 🔍 Search Bar
+        //Search Bar
         OutlinedTextField(
             value = searchQuery,
             onValueChange = {
@@ -62,7 +62,7 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🎬 Movies Grid
+        //Movies Grid
         if (searchResults.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),

@@ -7,7 +7,7 @@ package com.example.movieapplication
     import org.junit.Test
     import org.robolectric.RobolectricTestRunner
 
-
+//using RoboectrictTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 
