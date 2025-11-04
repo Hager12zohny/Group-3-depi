@@ -2,8 +2,9 @@ package com.example.movieapplication.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -33,11 +34,12 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             .padding(16.dp)
     ) {
 
+        // 🔍 Search Bar
         OutlinedTextField(
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
-                viewModel.searchMovies(searchQuery.text) // << البحث الحقيقي هنا
+                viewModel.searchMovies(searchQuery.text)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -60,41 +62,73 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items(searchResults) { movie ->
-                MovieItem(movie.title, movie.poster_path)
+        // 🎬 Movies Grid
+        if (searchResults.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No movies found", color = Color.White.copy(alpha = 0.7f))
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2), // 2 columns
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                contentPadding = PaddingValues(4.dp)
+            ) {
+                items(searchResults) { movie ->
+                    MovieCard(
+                        title = movie.title,
+                        posterPath = movie.poster_path,
+                        onClick = {
+                            // navigate to detail screen when clicked
+                            navController.navigate("details/${movie.id}")
+                        }
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun MovieItem(title: String, posterPath: String) {
+fun MovieCard(title: String, posterPath: String, onClick: () -> Unit) {
     val imageUrl = "https://image.tmdb.org/t/p/w500$posterPath"
 
-    Row(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.medium)
-            .background(Color.White.copy(alpha = 0.15f))
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(270.dp)
+            .clip(MaterialTheme.shapes.medium),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
     ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(MaterialTheme.shapes.medium)
+            )
 
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = title,
-            modifier = Modifier
-                .size(80.dp)
-                .clip(MaterialTheme.shapes.small)
-        )
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Text(
-            text = title,
-            color = Color.White,
-            style = MaterialTheme.typography.titleMedium
-        )
+            Text(
+                text = title,
+                color = Color.White,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .align(Alignment.CenterHorizontally),
+                maxLines = 2
+            )
+        }
     }
 }
