@@ -52,6 +52,11 @@ object MovieRepository {
         }
         return movies
     }
+    fun getAllMovies(): List<Movie> {
+        // You can change this to getNowPlayingMovies() if you prefer
+        return getTrendingMovies("day")
+    }
+
 
     fun getTrendingMovies(timeWindow: String = "day"): List<Movie> {
         val url = "$BASE_URL/trending/movie/$timeWindow?api_key=$API_KEY&language=$LANG"
