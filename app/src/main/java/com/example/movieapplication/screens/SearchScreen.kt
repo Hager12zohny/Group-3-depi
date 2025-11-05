@@ -1,7 +1,6 @@
 package com.example.movieapplication.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,13 +19,23 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.movieapplication.viewmodel.SearchViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = viewModel()) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
-    val searchResults = viewModel.searchResults.collectAsState().value
+    val searchResults by viewModel.searchResults.collectAsState()
+    val allMovies by viewModel.allMovies.collectAsState()
+    val scope = rememberCoroutineScope()
 
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchAllMovies()
+    }
+
+
+    val displayedMovies = if (searchQuery.text.isBlank()) allMovies else searchResults
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -39,7 +48,13 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
-                viewModel.searchMovies(searchQuery.text)
+                if (it.text.isBlank()) {
+                    // if search bar cleared, show all movies again
+                    scope.launch { viewModel.fetchAllMovies() }
+                } else {
+                    // otherwise perform search
+                    scope.launch { viewModel.searchMovies(it.text) }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -59,7 +74,7 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
         Spacer(modifier = Modifier.height(16.dp))
 
         //Movies Grid
-        if (searchResults.isEmpty()) {
+        if (displayedMovies.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -68,18 +83,17 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             }
         } else {
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2), // 2 columns
+                columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 contentPadding = PaddingValues(4.dp)
             ) {
-                items(searchResults) { movie ->
+                items(displayedMovies) { movie ->
                     MovieCard(
                         title = movie.title,
                         posterPath = movie.poster_path,
                         onClick = {
-                            // navigate to detail screen when clicked
                             navController.navigate("details/${movie.id}")
                         }
                     )

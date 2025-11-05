@@ -16,6 +16,21 @@ class SearchViewModel : ViewModel() {
     private val _searchResults = MutableStateFlow<List<Movie>>(emptyList())
     val searchResults: StateFlow<List<Movie>> = _searchResults
 
+    private val _allMovies = MutableStateFlow<List<Movie>>(emptyList())
+    val allMovies: StateFlow<List<Movie>> = _allMovies
+
+    fun fetchAllMovies() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val all = MovieRepository.getAllMovies()
+                _allMovies.value = all
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _allMovies.value = emptyList()
+            }
+        }
+    }
+
     fun searchMovies(query: String) {
         if (query.isBlank()) {
             _searchResults.value = emptyList()
