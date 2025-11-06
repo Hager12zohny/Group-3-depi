@@ -60,9 +60,7 @@ fun MovieHomeScreen(
             .padding(8.dp)
     ) {
         // Search Bar
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -74,15 +72,8 @@ fun MovieHomeScreen(
                     tint = Color(0xFF9C27B0),
                     modifier = Modifier.clickable { clickOnSearch() }
                 )
-            },
-            singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF9C27B0),
-                unfocusedBorderColor = Color(0xFF9C27B0),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
             )
-        )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -1,9 +1,10 @@
 package com.example.movieapplication.screens
 
 import android.util.Log
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,35 +13,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-
-import com.example.movieapplication.viewmodel.DetailsViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movieapplication.model.CastMember
 import com.example.movieapplication.model.Review
-import kotlinx.coroutines.*
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
+import com.example.movieapplication.viewmodel.DetailsViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 @Composable
 fun DetailsScreen(movieId: Int, viewModel: DetailsViewModel = viewModel()) {
     val movieDetails by viewModel.movieDetails.collectAsState()
     val castList by viewModel.castList.collectAsState()
     val reviewList by viewModel.reviewList.collectAsState()
-
 
     LaunchedEffect(movieId) {
         Log.d("DETAILS_UI", "Requesting details for movieId=$movieId")
@@ -142,7 +133,7 @@ fun MovieDetailBottom(
             .background(Color(0xFF1C1C27))
             .padding(horizontal = 16.dp)
     ) {
-        //Cast Section
+        // Cast Section
         Text(
             text = "Cast",
             style = MaterialTheme.typography.bodyLarge.copy(
@@ -170,7 +161,7 @@ fun MovieDetailBottom(
             }
         }
 
-        //  Reviews Section
+        // Reviews Section
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
@@ -225,7 +216,6 @@ fun CastItem(name: String, imageUrl: String?) {
     }
 }
 
-
 @Composable
 fun ReviewItem(reviewer: String, content: String) {
     Column(
@@ -246,61 +236,5 @@ fun ReviewItem(reviewer: String, content: String) {
             color = Color(0xFFBBBBBB),
             fontSize = 13.sp
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDetailsScreen() {
-    DetailsScreen(movieId = 550)
-}
-@Composable
-fun DetailsScreen() {
-    var movieData by remember { mutableStateOf<JSONObject?>(null) }
-
-    LaunchedEffect(Unit) {
-        getMovieDetailsHttp { result ->
-            movieData = result
-        }
-    }
-
-    Column {
-        Text(
-            text = movieData?.toString() ?: "Loading...",
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
-fun getMovieDetailsHttp(onResult: (JSONObject?) -> Unit) {
-    CoroutineScope(Dispatchers.IO).launch {
-        val apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=YOUR_API_KEY"
-        try {
-            val url = URL(apiUrl)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.connect()
-
-            val responseCode = connection.responseCode
-            if (responseCode == 200) {
-                val response = connection.inputStream.bufferedReader().use { it.readText() }
-                val json = JSONObject(response)
-
-                withContext(Dispatchers.Main) {
-                    onResult(json)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    onResult(null)
-                }
-            }
-
-            connection.disconnect()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                onResult(null)
-            }
-        }
     }
 }
