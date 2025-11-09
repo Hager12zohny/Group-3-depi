@@ -1,7 +1,6 @@
 package com.example.movieapplication.repository
 
 import com.example.movieapplication.model.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader

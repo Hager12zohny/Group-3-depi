@@ -1,5 +1,6 @@
 package com.example.movieapplication
 
+//import androidx.xr.runtime.Config
 import com.example.movieapplication.model.*
 import com.example.movieapplication.repository.MovieRepository
 import com.example.movieapplication.viewmodel.DetailsViewModel

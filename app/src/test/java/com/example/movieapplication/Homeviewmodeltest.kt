@@ -2,6 +2,8 @@ package com.example.movieapp.viewmodel
 
 import com.example.movieapp.data.Movie
 import com.example.movieapp.data.MovieRepository
+import com.example.movieapplication.repository.MovieRepository
+import com.example.movieapplication.viewmodel.HomeViewModel
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 
@@ -12,6 +14,7 @@ import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito.mock
 import org.mockito.kotlin.*
 
 @RunWith(RobolectricTestRunner::class)

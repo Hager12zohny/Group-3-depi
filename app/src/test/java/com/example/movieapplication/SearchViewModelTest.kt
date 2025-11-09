@@ -40,11 +40,16 @@ class SearchViewModel(private val repo: MovieRepository) : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
                 val movies = repo.searchMovies(query)
+
                 _uiState.value = _uiState.value.copy(
                     movies = movies,
                     isLoading = false,
                     errorMessage = null
                 )
+
+                _uiState.value =
+                    _uiState.value.copy(movies = movies, isLoading = false, errorMessage = null)
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
