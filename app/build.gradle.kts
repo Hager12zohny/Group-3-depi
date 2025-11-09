@@ -73,7 +73,10 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.compose.material:material-icons-extended:1.6.0")
     implementation(platform("androidx.compose:compose-bom:2025.03.00"))
+
+
     implementation(libs.androidx.runtime)
+
 
 
 

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.movieapplication.model.Movie
 import com.example.movieapplication.repository.MovieRepository
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,10 +20,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+
+
 
 data class UiState(
     val movies: List<Movie> = emptyList(),
@@ -39,19 +40,32 @@ class SearchViewModel(private val repo: MovieRepository) : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
                 val movies = repo.searchMovies(query)
+
+                _uiState.value = _uiState.value.copy(
+                    movies = movies,
+                    isLoading = false,
+                    errorMessage = null
+                )
+
                 _uiState.value =
                     _uiState.value.copy(movies = movies, isLoading = false, errorMessage = null)
+
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = e.message)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
             }
         }
     }
 }
 
+
+
 @RunWith(RobolectricTestRunner::class)
 class SearchViewModelTest {
 
-    private val repo = mock<MovieRepository>()
+    private val repo = mockk<MovieRepository>()
     private lateinit var viewModel: SearchViewModel
     private val dispatcher = StandardTestDispatcher()
 
@@ -69,8 +83,8 @@ class SearchViewModelTest {
     @Test
     fun searchQueryReturnsMovieList() = runTest {
         val query = "avatar"
-        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8.2, "Sci-fi"))
-        whenever(repo.searchMovies(query)).thenReturn(fakeMovies)
+        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8, "Sci-fi"))
+        coEvery { repo.searchMovies(query) } returns fakeMovies
 
         viewModel.searchMovies(query)
         advanceUntilIdle()
@@ -81,7 +95,7 @@ class SearchViewModelTest {
 
     @Test
     fun searchQueryReturnsEmptyList() = runTest {
-        whenever(repo.searchMovies("nothing")).thenReturn(emptyList())
+        coEvery { repo.searchMovies("nothing") } returns emptyList()
 
         viewModel.searchMovies("nothing")
         advanceUntilIdle()
@@ -92,7 +106,7 @@ class SearchViewModelTest {
 
     @Test
     fun searchQueryFailsGracefully() = runTest {
-        whenever(repo.searchMovies(any())).thenThrow(RuntimeException("API failed"))
+        coEvery { repo.searchMovies(any()) } throws RuntimeException("API failed")
 
         viewModel.searchMovies("error")
         advanceUntilIdle()
