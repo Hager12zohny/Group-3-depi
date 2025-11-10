@@ -23,6 +23,9 @@ import com.example.movieapplication.R
 import com.example.movieapplication.model.Movie
 import com.example.movieapplication.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 
 @Composable
 fun MovieHomeScreen(
@@ -32,10 +35,8 @@ fun MovieHomeScreen(
 ) {
     val newReleases by homeViewModel.newReleases.collectAsState()
     val trending by homeViewModel.trendingMovies.collectAsState()
-
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    // دمج أول صورة Mission Impossible مع بقية trending
     val headerMovies = remember(trending) {
         if (trending.isNotEmpty()) {
             listOf(
@@ -45,7 +46,7 @@ fun MovieHomeScreen(
                     poster_path = "",
                     overview = "Ethan Hunt embarks on a dangerous mission..."
                 )
-            ) + trending
+            ) + trending.take(2)
         } else emptyList()
     }
 
@@ -59,8 +60,10 @@ fun MovieHomeScreen(
             )
             .padding(8.dp)
     ) {
-        // Search Bar
-        Box(
+        // Search Box
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -72,14 +75,25 @@ fun MovieHomeScreen(
                     tint = Color(0xFF9C27B0),
                     modifier = Modifier.clickable { clickOnSearch() }
                 )
+            },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF9C27B0),
+                unfocusedBorderColor = Color(0xFF9C27B0),
+                focusedTextColor = Color.White,
+                unfocusedTextColor = Color.White,
+                cursorColor = Color(0xFF9C27B0)
             )
-        }
+
+
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // HEADER LARGE VERTICAL AUTO SLIDER
         if (headerMovies.isNotEmpty()) {
-            LargeHeaderSlider(movies = headerMovies, onMovieClick = onMovieClick)
+            PagerHeaderSlider(
+                movies = headerMovies,
+                onMovieClick = onMovieClick
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -114,32 +128,35 @@ fun MovieHomeScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LargeHeaderSlider(
+fun PagerHeaderSlider(
     movies: List<Movie>,
     onMovieClick: (Int) -> Unit
 ) {
-    // ناخد أول 3 أفلام فقط
-    val headerMovies = remember(movies) { movies.take(3) }
-    var currentIndex by remember { mutableStateOf(0) }
+    val pagerState = rememberPagerState(pageCount = { movies.size })
 
-    // Auto scroll every 5 seconds
-    LaunchedEffect(headerMovies) {
-        while (headerMovies.isNotEmpty()) {
+    // Auto scroll
+    LaunchedEffect(pagerState) {
+        while (true) {
             delay(5000)
-            currentIndex = (currentIndex + 1) % headerMovies.size
+            val next = (pagerState.currentPage + 1) % movies.size
+            pagerState.animateScrollToPage(next)
         }
     }
 
-    if (headerMovies.isNotEmpty()) {
-        val movie = headerMovies[currentIndex]
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+    ) { page ->
+        val movie = movies[page]
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp) // حجم كبير للصورة
-                .clickable { if(movie.id != -1) onMovieClick(movie.id) }
+                .fillMaxSize()
+                .clickable { if (movie.id != -1) onMovieClick(movie.id) }
         ) {
-            // اسم الفيلم فوق الصورة
             Text(
                 text = movie.title,
                 color = Color.White,
@@ -157,7 +174,7 @@ fun LargeHeaderSlider(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f) // الصورة تأخذ باقي المساحة بشكل عمودي
+                    .weight(1f)
             )
         }
     }
@@ -200,3 +217,4 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         )
     }
 }
+
