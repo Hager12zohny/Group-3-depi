@@ -61,31 +61,34 @@ fun MovieHomeScreen(
             .padding(8.dp)
     ) {
         // Search Box
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
-            placeholder = { Text("Search movies...", color = Color(0xFF9C27B0)) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Search",
-                    tint = Color(0xFF9C27B0),
-                    modifier = Modifier.clickable { clickOnSearch() }
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF9C27B0),
-                unfocusedBorderColor = Color(0xFF9C27B0),
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                cursorColor = Color(0xFF9C27B0)
+                .padding(8.dp)
+                .clickable { clickOnSearch() }
+        ) {
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = { Text("Search movies...", color = Color(0xFF9C27B0)) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Search",
+                        tint = Color(0xFF9C27B0)
+                    )
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color(0xFF9C27B0),
+                    unfocusedBorderColor = Color(0xFF9C27B0),
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color(0xFF9C27B0)
+                ),
+                enabled = false
             )
+        }
 
-
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -23,7 +23,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 
-
 data class UiState(
     val movies: List<Movie> = emptyList(),
     val isLoading: Boolean = false,
@@ -61,7 +60,6 @@ class SearchViewModel(private val repo: MovieRepository) : ViewModel() {
 }
 
 
-
 @RunWith(RobolectricTestRunner::class)
 class SearchViewModelTest {
 
@@ -83,7 +81,7 @@ class SearchViewModelTest {
     @Test
     fun searchQueryReturnsMovieList() = runTest {
         val query = "avatar"
-        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8, "Sci-fi"))
+        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8.0, "Sci-fi"))
         coEvery { repo.searchMovies(query) } returns fakeMovies
 
         viewModel.searchMovies(query)
