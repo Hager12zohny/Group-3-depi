@@ -158,7 +158,7 @@ fun PagerHeaderSlider(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { if (movie.id != -1) onMovieClick(movie.id) }
+                .clickable { if (movie.id > 0) onMovieClick(movie.id) }
         ) {
             Text(
                 text = movie.title,
@@ -220,4 +220,3 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         )
     }
 }
-

@@ -75,6 +75,7 @@ object MovieRepository {
     }
 
     fun getMovieDetails(movieId: Int): MovieDetails? {
+
         val url = "$BASE_URL/movie/$movieId?api_key=$API_KEY&language=$LANG"
         val jsonResponse = makeHttpRequest(url) ?: return null
         val item = JSONObject(jsonResponse)

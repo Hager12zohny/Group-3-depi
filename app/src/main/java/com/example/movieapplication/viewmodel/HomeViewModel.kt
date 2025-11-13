@@ -13,7 +13,7 @@ import java.net.URL
 
 class HomeViewModel : ViewModel() {
 
-    private val apiKey = "72cfd6fdf27b6a0abb9fdc22fb2ee866"
+    private val apiKey = "0e190f11fcdfb1b31cc1f977bb9420f5"
 
     private val _newReleases = MutableStateFlow<List<Movie>>(emptyList())
     val newReleases: StateFlow<List<Movie>> = _newReleases
