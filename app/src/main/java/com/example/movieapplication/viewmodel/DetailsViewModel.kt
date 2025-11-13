@@ -7,6 +7,7 @@ import com.example.movieapplication.model.MovieDetails
 import com.example.movieapplication.model.CastMember
 import com.example.movieapplication.model.Review
 import com.example.movieapplication.repository.MovieRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class DetailsViewModel : ViewModel() {
         Log.d("DETAILS_VM", "Fetching movie details for ID = $movieId")
 
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val details = MovieRepository.getMovieDetails(movieId)
                 val cast = MovieRepository.getMovieCast(movieId)
