@@ -2,6 +2,7 @@ package com.example.movieapplication.repository
 
 import com.example.movieapplication.model.*
 import org.json.JSONObject
+import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
