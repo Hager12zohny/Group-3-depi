@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -19,13 +21,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.movieapplication.R
 import com.example.movieapplication.model.Movie
 import com.example.movieapplication.viewmodel.HomeViewModel
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.ui.graphics.graphicsLayer
 
 @Composable
 fun MovieHomeScreen(
@@ -37,22 +39,13 @@ fun MovieHomeScreen(
     val trending by homeViewModel.trendingMovies.collectAsState()
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
 
-    val headerMovies = remember(trending) {
-        if (trending.isNotEmpty()) {
-            listOf(
-                Movie(
-                    id = -1,
-                    title = "Mission Impossible",
-                    poster_path = "",
-                    overview = "Ethan Hunt embarks on a dangerous mission..."
-                )
-            ) + trending.take(2)
-        } else emptyList()
-    }
+    val headerMovies = remember(trending) { trending.take(5) }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(Color.Black, Color(0xFF9C27B0))
@@ -89,13 +82,13 @@ fun MovieHomeScreen(
             )
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         if (headerMovies.isNotEmpty()) {
             PagerHeaderSlider(
                 movies = headerMovies,
-                onMovieClick = onMovieClick
+                onMovieClick = onMovieClick,
+                scrollOffset = scrollState.value
             )
         }
 
@@ -109,6 +102,7 @@ fun MovieHomeScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
+
         MovieSection(
             movies = newReleases.filter { it.title.contains(searchQuery.text, ignoreCase = true) },
             onMovieClick = onMovieClick
@@ -124,10 +118,13 @@ fun MovieHomeScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(8.dp)
         )
+
         MovieSection(
             movies = trending.filter { it.title.contains(searchQuery.text, ignoreCase = true) },
             onMovieClick = onMovieClick
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -135,7 +132,8 @@ fun MovieHomeScreen(
 @Composable
 fun PagerHeaderSlider(
     movies: List<Movie>,
-    onMovieClick: (Int) -> Unit
+    onMovieClick: (Int) -> Unit,
+    scrollOffset: Int
 ) {
     val pagerState = rememberPagerState(pageCount = { movies.size })
 
@@ -155,29 +153,34 @@ fun PagerHeaderSlider(
             .height(300.dp)
     ) { page ->
         val movie = movies[page]
-        Column(
+
+        val parallaxOffset = (scrollOffset * 0.3f).coerceAtMost(150f)
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { if (movie.id > 0) onMovieClick(movie.id) }
+                .clickable { onMovieClick(movie.id) }
         ) {
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                contentDescription = movie.title,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        translationY = -parallaxOffset // تأثير الـ parallax
+                    }
+            )
+
+            // Overlay Text
             Text(
                 text = movie.title,
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp)
-            )
-
-            val imageModel = if (movie.id == -1) R.drawable.missionimpossible
-            else "https://image.tmdb.org/t/p/w500${movie.poster_path}"
-
-            AsyncImage(
-                model = imageModel,
-                contentDescription = movie.title,
-                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                    .padding(12.dp)
+                    .background(Color(0x55000000))
             )
         }
     }
@@ -209,11 +212,8 @@ fun MovieCard(movie: Movie, onClick: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
     ) {
-        val imageModel = if (movie.id == -1) R.drawable.missionimpossible
-        else "https://image.tmdb.org/t/p/w500${movie.poster_path}"
-
         AsyncImage(
-            model = imageModel,
+            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

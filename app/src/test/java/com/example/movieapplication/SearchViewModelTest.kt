@@ -81,7 +81,7 @@ class SearchViewModelTest {
     @Test
     fun searchQueryReturnsMovieList() = runTest {
         val query = "avatar"
-        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8.0, "Sci-fi"))
+        val fakeMovies = listOf(Movie(5, "Avatar", "poster.png", 8, "Sci-fi"))
         coEvery { repo.searchMovies(query) } returns fakeMovies
 
         viewModel.searchMovies(query)
