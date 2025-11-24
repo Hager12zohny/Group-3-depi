@@ -85,20 +85,19 @@ fun SearchScreen(navController: NavHostController, viewModel: SearchViewModel = 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                contentPadding = PaddingValues(2.dp)
             ) {
                 items(displayedMovies) { movie ->
                     MovieCard(
                         title = movie.title,
                         posterPath = movie.poster_path,
-                        onClick = {
-                            navController.navigate("details/${movie.id}")
-                        }
+                        onClick = { navController.navigate("details/${movie.id}") }
                     )
                 }
             }
+
         }
     }
 }
@@ -110,10 +109,12 @@ fun MovieCard(title: String, posterPath: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(270.dp)
+            .aspectRatio(0.65f)   // Auto-resizes to fit grid properly
             .clip(MaterialTheme.shapes.medium),
         onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.1f))
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White.copy(alpha = 0.1f)
+        )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -124,11 +125,12 @@ fun MovieCard(title: String, posterPath: String, onClick: () -> Unit) {
                 contentDescription = title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .weight(1f)
                     .clip(MaterialTheme.shapes.medium)
+
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = title,

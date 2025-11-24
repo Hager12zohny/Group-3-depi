@@ -63,7 +63,8 @@ fun MovieHomeScreen(
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
-                placeholder = { Text("Search movies...", color = Color(0xFF9C27B0)) },
+                placeholder = { Text("Search movies...", color = Color.White) }
+                ,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Filled.Search,
